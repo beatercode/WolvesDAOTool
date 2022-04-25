@@ -1,0 +1,98 @@
+mat-form-field {
+  display: block;
+}
+
+textarea {
+  min-height: 130px;
+}
+
+table th {
+  text-align: left;
+  padding-right: 10px;
+  font-size: 0.9em;
+}
+
+table td {
+  font-size: 0.9em;
+}
+
+td.mat-cell {
+  padding: 0 3px 0 3px;
+}
+
+.success {
+  background-color: rgba(0, 255, 0, 0.3);
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.splitBox {
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+mat-divider {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+mat-expansion-panel {
+  margin-bottom: 10px;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.max1000px {
+  max-width: 1000px;
+}
+
+table {
+  width: 100%;
+}
+
+.subHeader {
+  font-weight: 400;
+}
+
+.separator20 {
+  margin-top: 15px;
+}
+
+.mat-elevation-z8 {
+  overflow-x: auto;
+}
+
+/* START COND CELL FORMATTING */
+
+.baseCell {
+  font-weight: 700;
+}
+
+.percentColor {
+  background-color: #f4c7c2;
+  font-weight: 700;
+}
+
+.percentColorGreen {
+  background-color: #b8e1cd;
+  font-weight: 700;
+}
+
+.percentColorOrange {
+  background-color: #f1c233;
+  font-weight: 700;
+}
+
+.percentColorAmber {
+  background-color: #fce8b2;
+  font-weight: 700;
+}
+
+/* END COND CELL FORMATTING */

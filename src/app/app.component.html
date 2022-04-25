@@ -1,0 +1,780 @@
+<div>
+  <div class="leftCol">
+    <form
+      [formGroup]="f"
+      (ngSubmit)="submitHandler()"
+      novalidate
+      class="max1000px center"
+      (keyup)="onKeyUp($event)"
+    >
+      <mat-form-field>
+        <input
+          matInput
+          type="number"
+          required
+          placeholder="Total Supply"
+          formControlName="totalSupply"
+        />
+        <mat-error></mat-error>
+      </mat-form-field>
+
+      <mat-expansion-panel
+        formGroupName="speedRound"
+        [expanded]="step === 0"
+        (opened)="setStep(0)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Speed Round </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Allocation"
+            formControlName="allocation"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Cliff In Months"
+            formControlName="cliff"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Vesting in Months"
+            formControlName="vesting"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Percent unlock TGE"
+            formControlName="tokensUnlockAtTGE"
+        /></mat-form-field>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        formGroupName="privateRound"
+        [expanded]="step === 1"
+        (opened)="setStep(1)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Private Round </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Allocation"
+            formControlName="allocation"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Cliff In Months"
+            formControlName="cliff"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Vesting in Months"
+            formControlName="vesting"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Percent unlock TGE"
+            formControlName="tokensUnlockAtTGE"
+        /></mat-form-field>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        formGroupName="publicSale"
+        [expanded]="step === 2"
+        (opened)="setStep(2)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Public Sale </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Allocation"
+            formControlName="allocation"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Cliff In Months"
+            formControlName="cliff"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Vesting in Months"
+            formControlName="vesting"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Percent unlock TGE"
+            formControlName="tokensUnlockAtTGE"
+        /></mat-form-field>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        [formGroup]="f"
+        [expanded]="step === 3"
+        (opened)="setStep(3)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Misc Info </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Current Price"
+            formControlName="currentPrice"
+        /></mat-form-field>
+        <mat-form-field class="splitBoxElement"
+          ><input
+            matInput
+            type="number"
+            placeholder="Market Cap of circulating"
+            formControlName="marketCap"
+        /></mat-form-field>
+      </mat-expansion-panel>
+    </form>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="rightCol">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="split">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Split</div>
+            <div class="subHeader">name</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.split }}
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="allocation">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Allocation</div>
+            <div class="subHeader">%</div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.allocation }}%</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="sum">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Sum</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.sum) }}
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="cliff">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Cliff</div>
+            <div class="subHeader">Months</div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.cliff }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="vesting">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Vesting</div>
+            <div class="subHeader">Months</div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.vesting }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="monthToComplete">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month T.C.</div>
+            <div class="subHeader">Months</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.monthToComplete }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tokensLocked">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Locked</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.tokensLocked) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tokensAddedMonthlyPostTGE">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Tokens A.M. post TGE</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.tokensAddedMonthPostTGE) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tokensUnlockTGE">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Percent unlocked TGE</div>
+            <div class="subHeader">%</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.tokensUnlockAtTGE) }}%
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <div class="separator20"></div>
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceMonth">
+        <ng-container matColumnDef="split">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Split</div>
+            <div class="subHeader">name</div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.split }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tge">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>TGE</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.tge) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month1">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 1</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month1) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month2">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 2</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month2) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month3">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 3</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month3) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month4">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 4</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month4) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month5">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 5</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month5) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month6">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 6</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month6) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month7">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 7</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month7) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month8">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 8</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month8) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month9">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 9</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month9) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month10">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 10</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month10) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="month11">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 11</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month11) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month12">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 12</div>
+            <div class="subHeader">token</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ formatIt(element.month12) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsMonth"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsMonth"></tr>
+      </table>
+    </div>
+
+    <div class="separator20"></div>
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceValue">
+        <ng-container matColumnDef="split">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Value</div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.split }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tge">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>TGE</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.tge) &&
+                removePercentageFromNumber(element.tge) > 50,
+              percentColorOrange:
+                hasPercentage(element.tge) &&
+                removePercentageFromNumber(element.tge) < 50 &&
+                removePercentageFromNumber(element.tge) > 20,
+              percentColorAmber:
+                hasPercentage(element.tge) &&
+                removePercentageFromNumber(element.tge) < 20 &&
+                removePercentageFromNumber(element.tge) > 10,
+              percentColorGreen:
+                hasPercentage(element.tge) &&
+                removePercentageFromNumber(element.tge) <= 10
+            }"
+          >
+            {{ formatIt(element.tge) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month1">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 1</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month1) &&
+                removePercentageFromNumber(element.month1) > 50,
+              percentColorOrange:
+                hasPercentage(element.month1) &&
+                removePercentageFromNumber(element.month1) < 50 &&
+                removePercentageFromNumber(element.month1) > 20,
+              percentColorAmber:
+                hasPercentage(element.month1) &&
+                removePercentageFromNumber(element.month1) < 20 &&
+                removePercentageFromNumber(element.month1) > 10,
+              percentColorGreen:
+                hasPercentage(element.month1) &&
+                removePercentageFromNumber(element.month1) <= 10
+            }"
+          >
+            {{ formatIt(element.month1) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month2">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 2</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month2) &&
+                removePercentageFromNumber(element.month2) > 50,
+              percentColorOrange:
+                hasPercentage(element.month2) &&
+                removePercentageFromNumber(element.month2) < 50 &&
+                removePercentageFromNumber(element.month2) > 20,
+              percentColorAmber:
+                hasPercentage(element.month2) &&
+                removePercentageFromNumber(element.month2) < 20 &&
+                removePercentageFromNumber(element.month2) > 10,
+              percentColorGreen:
+                hasPercentage(element.month2) &&
+                removePercentageFromNumber(element.month2) <= 10
+            }"
+          >
+            {{ formatIt(element.month2) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month3">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 3</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month3) &&
+                removePercentageFromNumber(element.month3) > 50,
+              percentColorOrange:
+                hasPercentage(element.month3) &&
+                removePercentageFromNumber(element.month3) < 50 &&
+                removePercentageFromNumber(element.month3) > 20,
+              percentColorAmber:
+                hasPercentage(element.month3) &&
+                removePercentageFromNumber(element.month3) < 20 &&
+                removePercentageFromNumber(element.month3) > 10,
+              percentColorGreen:
+                hasPercentage(element.month3) &&
+                removePercentageFromNumber(element.month3) <= 10
+            }"
+          >
+            {{ formatIt(element.month3) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month4">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 4</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month4) &&
+                removePercentageFromNumber(element.month4) > 50,
+              percentColorOrange:
+                hasPercentage(element.month4) &&
+                removePercentageFromNumber(element.month4) < 50 &&
+                removePercentageFromNumber(element.month4) > 20,
+              percentColorAmber:
+                hasPercentage(element.month4) &&
+                removePercentageFromNumber(element.month4) < 20 &&
+                removePercentageFromNumber(element.month4) > 10,
+              percentColorGreen:
+                hasPercentage(element.month4) &&
+                removePercentageFromNumber(element.month4) <= 10
+            }"
+          >
+            {{ formatIt(element.month4) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month5">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 5</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month5) &&
+                removePercentageFromNumber(element.month5) > 50,
+              percentColorOrange:
+                hasPercentage(element.month5) &&
+                removePercentageFromNumber(element.month5) < 50 &&
+                removePercentageFromNumber(element.month5) > 20,
+              percentColorAmber:
+                hasPercentage(element.month5) &&
+                removePercentageFromNumber(element.month5) < 20 &&
+                removePercentageFromNumber(element.month5) > 10,
+              percentColorGreen:
+                hasPercentage(element.month5) &&
+                removePercentageFromNumber(element.month5) <= 10
+            }"
+          >
+            {{ formatIt(element.month5) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month6">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 6</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month6) &&
+                removePercentageFromNumber(element.month6) > 50,
+              percentColorOrange:
+                hasPercentage(element.month6) &&
+                removePercentageFromNumber(element.month6) < 50 &&
+                removePercentageFromNumber(element.month6) > 20,
+              percentColorAmber:
+                hasPercentage(element.month6) &&
+                removePercentageFromNumber(element.month6) < 20 &&
+                removePercentageFromNumber(element.month6) > 10,
+              percentColorGreen:
+                hasPercentage(element.month6) &&
+                removePercentageFromNumber(element.month6) <= 10
+            }"
+          >
+            {{ formatIt(element.month6) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month7">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 7</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month7) &&
+                removePercentageFromNumber(element.month7) > 50,
+              percentColorOrange:
+                hasPercentage(element.month7) &&
+                removePercentageFromNumber(element.month7) < 50 &&
+                removePercentageFromNumber(element.month7) > 20,
+              percentColorAmber:
+                hasPercentage(element.month7) &&
+                removePercentageFromNumber(element.month7) < 20 &&
+                removePercentageFromNumber(element.month7) > 10,
+              percentColorGreen:
+                hasPercentage(element.month7) &&
+                removePercentageFromNumber(element.month7) <= 10
+            }"
+          >
+            {{ formatIt(element.month7) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month8">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 8</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month8) &&
+                removePercentageFromNumber(element.month8) > 50,
+              percentColorOrange:
+                hasPercentage(element.month8) &&
+                removePercentageFromNumber(element.month8) < 50 &&
+                removePercentageFromNumber(element.month8) > 20,
+              percentColorAmber:
+                hasPercentage(element.month8) &&
+                removePercentageFromNumber(element.month8) < 20 &&
+                removePercentageFromNumber(element.month8) > 10,
+              percentColorGreen:
+                hasPercentage(element.month8) &&
+                removePercentageFromNumber(element.month8) <= 10
+            }"
+          >
+            {{ formatIt(element.month8) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month9">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 9</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month9) &&
+                removePercentageFromNumber(element.month9) > 50,
+              percentColorOrange:
+                hasPercentage(element.month9) &&
+                removePercentageFromNumber(element.month9) < 50 &&
+                removePercentageFromNumber(element.month9) > 20,
+              percentColorAmber:
+                hasPercentage(element.month9) &&
+                removePercentageFromNumber(element.month9) < 20 &&
+                removePercentageFromNumber(element.month9) > 10,
+              percentColorGreen:
+                hasPercentage(element.month9) &&
+                removePercentageFromNumber(element.month9) <= 10
+            }"
+          >
+            {{ formatIt(element.month9) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month10">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 10</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month10) &&
+                removePercentageFromNumber(element.month10) > 50,
+              percentColorOrange:
+                hasPercentage(element.month10) &&
+                removePercentageFromNumber(element.month10) < 50 &&
+                removePercentageFromNumber(element.month10) > 20,
+              percentColorAmber:
+                hasPercentage(element.month10) &&
+                removePercentageFromNumber(element.month10) < 20 &&
+                removePercentageFromNumber(element.month10) > 10,
+              percentColorGreen:
+                hasPercentage(element.month10) &&
+                removePercentageFromNumber(element.month10) <= 10
+            }"
+          >
+            {{ formatIt(element.month10) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="month11">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 11</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month11) &&
+                removePercentageFromNumber(element.month11) > 50,
+              percentColorOrange:
+                hasPercentage(element.month11) &&
+                removePercentageFromNumber(element.month11) < 50 &&
+                removePercentageFromNumber(element.month11) > 20,
+              percentColorAmber:
+                hasPercentage(element.month11) &&
+                removePercentageFromNumber(element.month11) < 20 &&
+                removePercentageFromNumber(element.month11) > 10,
+              percentColorGreen:
+                hasPercentage(element.month11) &&
+                removePercentageFromNumber(element.month11) <= 10
+            }"
+          >
+            {{ formatIt(element.month11) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="month12">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>Month 12</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              percentColorRed:
+                hasPercentage(element.month12) &&
+                removePercentageFromNumber(element.month12) > 50,
+              percentColorOrange:
+                hasPercentage(element.month12) &&
+                removePercentageFromNumber(element.month12) < 50 &&
+                removePercentageFromNumber(element.month12) > 20,
+              percentColorAmber:
+                hasPercentage(element.month12) &&
+                removePercentageFromNumber(element.month12) < 20 &&
+                removePercentageFromNumber(element.month12) > 10,
+              percentColorGreen:
+                hasPercentage(element.month12) &&
+                removePercentageFromNumber(element.month12) <= 10
+            }"
+          >
+            {{ formatIt(element.month12) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsMonth"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsMonth"></tr>
+      </table>
+    </div>
+  </div>
+</div>

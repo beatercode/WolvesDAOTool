@@ -1,0 +1,17 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+}
+
+.daoTitle {
+  background-color: #3f51b5;
+  margin: 0px !important;
+  padding: 20px;
+  color: #fff;
+}
+
+.basic-container {
+  padding: 30px;
+}
